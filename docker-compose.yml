@@ -49,11 +49,16 @@ services:
       - backend
     ports:
       - "80:80"
-    # 挂可写内存盘，确保 nginx 运行时写 PID / 临时目录不受限于只读或受限的 /run、/tmp
+    # 挂可写内存盘，确保 nginx 运行时临时目录可写
     tmpfs:
       - /tmp
       - /run
       - /var/cache/nginx
+    # 放开 seccomp：该宿主的 seccomp 策略拦截了 nginx 写 PID 使用的 pwrite64 系统调用
+    # （error.log 走 write() 正常，PID 走 pwrite() 被拦，故报 Operation not permitted）。
+    # 放开后 nginx 才能正常写 PID 与运行时临时目录。
+    security_opt:
+      - seccomp=unconfined
     networks:
       - mingli-net
 
