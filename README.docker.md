@@ -14,7 +14,7 @@ mingli-platform/
 │   └── .dockerignore
 └── mingli-web/
     ├── Dockerfile            # 多阶段：Node 构建 dist → nginx 托管
-    ├── nginx.conf            # 站点配置：SPA 回退 + /api 反向代理
+    ├── nginx.conf            # 主配置（pid 指向 /tmp 规避容器内 /run 不可写）+ SPA 回退 + /api 反向代理
     └── .dockerignore
 ```
 

@@ -12,8 +12,8 @@ RUN npm run build
 
 # ---- 2) 运行阶段 ----
 FROM nginx:alpine
-# 用自定义站点配置覆盖默认配置（含 /api 反向代理 + SPA 回退）
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# 用自定义主配置覆盖默认配置（含 pid /tmp 修复 + /api 反向代理 + SPA 回退）
+COPY nginx.conf /etc/nginx/nginx.conf
 COPY --from=build /app/dist /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
