@@ -1,43 +1,20 @@
 # 玄枢 · 盲派八字命理平台 —— Docker Compose 部署
 #
+# 数据库使用外部远程 MySQL（不在本 compose 内启容器），请通过 .env 提供连接信息。
 # 构建并启动： docker compose up -d --build
-# 停止：       docker compose down            （保留 mysql 数据卷）
-# 停止并清数据： docker compose down -v
+# 停止：       docker compose down
 # 访问地址：   http://<服务器IP>   （前端映射宿主机 80 端口）
 #
 # 敏感配置（密码等）请用 .env 覆盖，切勿把含真实密码的 .env 提交到仓库。
-# 本文件变量默认值仅为占位（changeme），生产务必通过 .env 设置强密码：
-#   MYSQL_ROOT_PASSWORD=changeme   （生产请改为强密码）
-#   MYSQL_DATABASE=mingli
+# 本文件变量默认值仅为占位（changeme），生产务必通过 .env 设置真实远程库信息：
+#   DB_HOST=your-remote-mysql-host   （远程数据库主机，必填）
+#   DB_PORT=3306
+#   DB_NAME=mingli
+#   DB_USERNAME=mingli_user
+#   DB_PASSWORD=change_me_to_a_strong_password
 # 复制 .env.example 为 .env 后按需修改即可。
 
 services:
-  # ---------------- MySQL ----------------
-  mysql:
-    image: mysql:8.0
-    container_name: mingli-mysql
-    restart: unless-stopped
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-changeme}
-      MYSQL_DATABASE: ${MYSQL_DATABASE:-mingli}
-      TZ: Asia/Shanghai
-    # 统一字符集，确保中文（天干/地支/物象）正常存储
-    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
-    # 仅宿主机本地调试时可保留；生产环境建议删掉此端口映射，避免 3306 暴露到公网
-    ports:
-      - "3306:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
-    healthcheck:
-      # $$ 转义为容器内的 $MYSQL_ROOT_PASSWORD，避免被宿主机 compose 提前展开
-      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-p$$MYSQL_ROOT_PASSWORD"]
-      interval: 10s
-      timeout: 5s
-      retries: 12
-      start_period: 30s
-    networks:
-      - mingli-net
-
   # ---------------- 后端（Spring Boot） ----------------
   backend:
     build:
@@ -45,17 +22,15 @@ services:
     image: mingli-backend:1.0.0
     container_name: mingli-backend
     restart: unless-stopped
-    depends_on:
-      mysql:
-        condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: mysql
-      # 以下变量注入后端 application.yml 的 ${DB_HOST} / ${MYSQL_ROOT_PASSWORD} 等占位符
-      DB_HOST: mysql
-      DB_PORT: "3306"
-      DB_NAME: ${MYSQL_DATABASE:-mingli}
-      MYSQL_USERNAME: root
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-changeme}
+      # 以下变量注入后端 application.yml 的 ${DB_HOST} / ${DB_PASSWORD} 等占位符
+      # DB_HOST 必须指向你的远程 MySQL 主机（云数据库/RDS 连接地址或服务器 IP）
+      DB_HOST: ${DB_HOST:-127.0.0.1}
+      DB_PORT: ${DB_PORT:-3306}
+      DB_NAME: ${DB_NAME:-mingli}
+      DB_USERNAME: ${DB_USERNAME:-root}
+      DB_PASSWORD: ${DB_PASSWORD:-changeme}
       TZ: Asia/Shanghai
     # 只对 compose 内部网络暴露 8080；如需宿主机调试可加 ports: - "8080:8080"
     expose:
@@ -76,9 +51,6 @@ services:
       - "80:80"
     networks:
       - mingli-net
-
-volumes:
-  mysql_data:
 
 networks:
   mingli-net:

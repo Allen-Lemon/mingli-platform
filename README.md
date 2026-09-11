@@ -49,8 +49,8 @@ CREATE DATABASE IF NOT EXISTS mingli DEFAULT CHARACTER SET utf8mb4 COLLATE utf8m
 ```
 
 2. 连接信息（主机 / 账号 / 密码）全部通过环境变量读取，源码不含明文。默认值：
-   `DB_HOST=127.0.0.1`、`DB_PORT=3306`、`DB_NAME=mingli`、`MYSQL_USERNAME=root`、
-   `MYSQL_ROOT_PASSWORD=changeme`（生产务必通过环境变量或 `.env` 提供强密码）。
+   `DB_HOST=127.0.0.1`、`DB_PORT=3306`、`DB_NAME=mingli`、`DB_USERNAME=root`、
+   `DB_PASSWORD=changeme`（生产务必通过环境变量或 `.env` 提供强密码）。
 
 3. 启动：
 
