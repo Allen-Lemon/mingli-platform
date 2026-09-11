@@ -1,0 +1,24 @@
+node_modules/
+dist/
+target/
+*.log
+build.log
+run.log
+
+# 临时调试文件
+req.json
+resp.json
+rule_doc.txt
+
+.idea/
+.vscode/
+*.iml
+.DS_Store
+
+# 敏感配置（含真实密码，切勿提交到仓库）
+.env
+.env.local
+.env.*.local
+
+# 工具内部数据（非项目源码，含本地工作记忆）
+.workbuddy/

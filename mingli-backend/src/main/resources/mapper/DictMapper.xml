@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mingli.mapper.DictMapper">
+
+    <select id="lushen" resultType="map">
+        SELECT gan, zhi, note FROM dict_lushen ORDER BY id
+    </select>
+
+    <select id="yangren" resultType="map">
+        SELECT gan, zhi, doubtful, note FROM dict_yangren ORDER BY id
+    </select>
+
+    <select id="yima" resultType="map">
+        SELECT group_zhi, ma_zhi, wuxiang FROM dict_yima ORDER BY id
+    </select>
+
+    <select id="kongwang" resultType="map">
+        SELECT xun_name, gan_range, kong_zhi FROM dict_kongwang ORDER BY id
+    </select>
+
+    <select id="gongwei" resultType="map">
+        SELECT dimension, pos_year, pos_month, pos_day_gan, pos_day_zhi, pos_hour
+        FROM dict_gongwei ORDER BY id
+    </select>
+
+    <select id="shishen" resultType="map">
+        SELECT name, positive, negative, careers FROM dict_shishen ORDER BY id
+    </select>
+
+    <select id="ganWuxiang" resultType="map">
+        SELECT gan, wuxiang FROM dict_gan_wuxiang ORDER BY id
+    </select>
+
+    <select id="zhiWuxiang" resultType="map">
+        SELECT zhi, wuxiang FROM dict_zhi_wuxiang ORDER BY id
+    </select>
+
+    <select id="muku" resultType="map">
+        SELECT ku_type, wuxiang FROM dict_muku ORDER BY id
+    </select>
+
+    <select id="qucai" resultType="map">
+        SELECT cond, method, xiji FROM dict_qucai ORDER BY id
+    </select>
+
+    <select id="qucaiMode" resultType="map">
+        SELECT feature, method, industries FROM dict_qucai_mode ORDER BY id
+    </select>
+
+    <select id="rules" resultType="map">
+        SELECT rule_code, category, title, content, doubtful
+        FROM dict_rule
+        <where>
+            <if test="category != null and category != ''">
+                AND category = #{category}
+            </if>
+        </where>
+        ORDER BY id
+    </select>
+
+    <select id="categories" resultType="map">
+        SELECT category AS name, COUNT(1) AS cnt
+        FROM dict_rule
+        GROUP BY category
+        ORDER BY category
+    </select>
+
+    <select id="countTable" resultType="int">
+        SELECT COUNT(1) FROM ${table}
+    </select>
+
+</mapper>

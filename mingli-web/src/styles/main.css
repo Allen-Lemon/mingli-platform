@@ -1,0 +1,100 @@
+:root {
+  --paper: #f7f3ea;
+  --paper-2: #fffdf8;
+  --ink: #2b2823;
+  --ink-2: #4a453d;
+  --ink-3: #7d766a;
+  --ink-4: #9a9285;
+  --line: #e5ddcd;
+  --cinnabar: #b03a2e;
+  --cinnabar-soft: rgba(176, 58, 46, 0.08);
+  --gold: #a8813a;
+  --jade: #3f7d6a;
+  --wood: #4f7a3f;
+  --fire: #c0392b;
+  --earth: #b98a3c;
+  --metal: #8a8f98;
+  --water: #3c6e9e;
+  --font-serif: "Songti SC", "SimSun", "STSong", "Noto Serif SC", serif;
+  --radius: 10px;
+}
+
+* { box-sizing: border-box; }
+
+html, body, #app {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+body {
+  background: var(--paper);
+  background-image:
+    radial-gradient(circle at 12% 8%, rgba(176, 58, 46, 0.045), transparent 42%),
+    radial-gradient(circle at 88% 4%, rgba(168, 129, 58, 0.05), transparent 38%);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei",
+    "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  margin: 0;
+  color: var(--ink);
+}
+
+.card {
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  font-family: var(--font-serif);
+  margin-bottom: 14px;
+}
+.section-title::before {
+  content: "";
+  width: 3px;
+  height: 16px;
+  background: var(--cinnabar);
+  border-radius: 2px;
+}
+
+.text-muted { color: var(--ink-3); }
+.text-small { font-size: 12px; }
+
+/* 五行配色 */
+.wx-木 { color: var(--wood); }
+.wx-火 { color: var(--fire); }
+.wx-土 { color: var(--earth); }
+.wx-金 { color: var(--metal); }
+.wx-水 { color: var(--water); }
+
+/* Element Plus 局部微调 */
+.el-card {
+  border-color: var(--line) !important;
+  border-radius: var(--radius) !important;
+}
+.el-button--primary {
+  --el-button-bg-color: var(--cinnabar);
+  --el-button-border-color: var(--cinnabar);
+  --el-button-hover-bg-color: #c2453a;
+  --el-button-hover-border-color: #c2453a;
+}
+.el-tabs__item.is-active { color: var(--cinnabar) !important; }
+.el-tabs__active-bar { background-color: var(--cinnabar) !important; }
+.el-tabs__item:hover { color: var(--cinnabar) !important; }
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: #d8cfbe; border-radius: 4px; }
+::-webkit-scrollbar-track { background: transparent; }

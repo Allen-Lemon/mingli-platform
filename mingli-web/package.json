@@ -1,0 +1,23 @@
+{
+  "name": "mingli-web",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "玄枢 · 盲派八字命理平台前端",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --port 4173"
+  },
+  "dependencies": {
+    "@element-plus-icons-vue": "^2.3.1",
+    "axios": "^1.6.8",
+    "element-plus": "^2.6.1",
+    "vue": "^3.4.21",
+    "vue-router": "^4.3.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.4",
+    "vite": "^5.2.8"
+  }
+}

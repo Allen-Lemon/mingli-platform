@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mingli.mapper.BaziRecordMapper">
+
+    <resultMap id="BaseResultMap" type="com.mingli.entity.BaziRecord">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="gender" property="gender"/>
+        <result column="birth_time" property="birthTime"/>
+        <result column="calendar_type" property="calendarType"/>
+        <result column="tz_offset" property="tzOffset"/>
+        <result column="longitude" property="longitude"/>
+        <result column="city_name" property="cityName"/>
+        <result column="true_solar" property="trueSolar"/>
+        <result column="year_gz" property="yearGz"/>
+        <result column="month_gz" property="monthGz"/>
+        <result column="day_gz" property="dayGz"/>
+        <result column="hour_gz" property="hourGz"/>
+        <result column="day_master" property="dayMaster"/>
+        <result column="chart_json" property="chartJson"/>
+        <result column="analysis_json" property="analysisJson"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, name, gender, birth_time, calendar_type, tz_offset, longitude, city_name,
+        true_solar, year_gz, month_gz, day_gz, hour_gz, day_master, chart_json, analysis_json, create_time
+    </sql>
+
+    <insert id="insert" parameterType="com.mingli.entity.BaziRecord"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO bazi_record
+        (name, gender, birth_time, calendar_type, tz_offset, longitude, city_name,
+         true_solar, year_gz, month_gz, day_gz, hour_gz, day_master, chart_json, analysis_json)
+        VALUES
+        (#{name}, #{gender}, #{birthTime}, #{calendarType}, #{tzOffset}, #{longitude}, #{cityName},
+         #{trueSolar}, #{yearGz}, #{monthGz}, #{dayGz}, #{hourGz}, #{dayMaster}, #{chartJson}, #{analysisJson})
+    </insert>
+
+    <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        SELECT <include refid="Base_Column_List"/> FROM bazi_record WHERE id = #{id}
+    </select>
+
+    <select id="selectPage" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM bazi_record
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND (name LIKE CONCAT('%', #{keyword}, '%')
+                     OR city_name LIKE CONCAT('%', #{keyword}, '%')
+                     OR day_gz LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+            <if test="gender != null and gender != ''">
+                AND gender = #{gender}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <select id="count" resultType="int">
+        SELECT COUNT(1) FROM bazi_record
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND (name LIKE CONCAT('%', #{keyword}, '%')
+                     OR city_name LIKE CONCAT('%', #{keyword}, '%')
+                     OR day_gz LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+            <if test="gender != null and gender != ''">
+                AND gender = #{gender}
+            </if>
+        </where>
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        DELETE FROM bazi_record WHERE id = #{id}
+    </delete>
+
+    <select id="statByDayMaster" resultType="map">
+        SELECT day_master AS name, COUNT(1) AS value
+        FROM bazi_record
+        WHERE day_master IS NOT NULL AND day_master &lt;&gt; ''
+        GROUP BY day_master
+        ORDER BY value DESC
+    </select>
+
+</mapper>

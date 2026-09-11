@@ -1,0 +1,9 @@
+node_modules
+dist
+.git
+.idea
+*.iml
+.workbuddy
+npm-debug.log*
+Dockerfile
+.dockerignore
