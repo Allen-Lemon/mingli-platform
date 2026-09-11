@@ -49,6 +49,11 @@ services:
       - backend
     ports:
       - "80:80"
+    # 挂可写内存盘，确保 nginx 运行时写 PID / 临时目录不受限于只读或受限的 /run、/tmp
+    tmpfs:
+      - /tmp
+      - /run
+      - /var/cache/nginx
     networks:
       - mingli-net
 
